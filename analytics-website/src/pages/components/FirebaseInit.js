@@ -8,5 +8,8 @@ const firebaseConfig = {
     appId: "1:22446294573:web:ae380025ebf504227b1aa4",
     databaseURL:"https://analytics-5460d-default-rtdb.europe-west1.firebasedatabase.app/"
   };
-const app = initializeApp(firebaseConfig);
+let app = null;
+if (typeof window !== 'undefined'){
+  app = initializeApp(firebaseConfig);
+}
 export default app;
