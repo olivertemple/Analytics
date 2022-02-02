@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+body, html{
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    width: 100vw;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+h1, h2{
+    margin:0;
+}
+
+.homepage{
+    width: 100vw;
+}
+.hero{
+    height: 100vh;
+    width: 100%;
+}
+.hero-content{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0px 20px 0px 20px;
+    width: calc(100% - 40px);
+    height: 100%;
+    align-self: center;
+}
+div.title{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:50%;
+    font-weight: bold;
+    font-size: 50px;
+    text-align: center;
+    margin-right: 25px;
+}
+div.chart{
+    width:calc(50% - 25px);
+    min-width: 400px;
+    display: flex;
+    justify-content: center;
+}
+@media screen and (max-width: 890px){
+   .hero-content{
+       flex-direction: column-reverse;
+   }
+}
+nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 40px 20px 40px;
+    position: fixed;
+    background-color: white;
+    width: calc(100vw - 80px);
+    z-index: 10;
+    ul{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+        margin:0;
+
+        li{
+            margin: 0px 10px 0px 10px;
+            
+            a{
+                font-size: 20px;
+                text-decoration: none;
+                color:black;  
+            }
+        }
+    }
+
+}
+
+
+section.about, section.examples{
+    margin: 0px 10% 10% 10%;
+    div.about-content, div.examples-content{
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        padding: 0px 40px 0px 40px;
+        margin: 0px;
+
+        h1{
+            font-size: 50px;
+            font-weight: bold;
+            margin: 0;
+        }
+        div.about-text, div.examples-text{
+            margin-left: 20px;
+            margin-top: 30px;
+            h2{
+                font-size: 30px;
+                font-weight: bold;
+            }
+            p{
+                margin: 5px 20px 0px 20px;
+                font-size: 20px;
+            }
+        }
+
+        div.about-text:first-of-type, div.examples-text:first-of-type{
+            margin-top: 0px;
+        }
+    }
+}

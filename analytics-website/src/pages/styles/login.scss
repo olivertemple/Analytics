@@ -1,0 +1,59 @@
+
+section.login, section.signup {
+    margin: 0px 10% 10% 10%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    div.login-content, div.signup-content {
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        padding: 0px 40px 0px 40px;
+        margin: 0px;
+
+        h1{
+            font-size: 50px;
+            font-weight: bold;
+            margin: 0;
+        }
+        div.login-form, div.signup-form {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+           
+            input{
+                width: calc(100% - 100px - 10%);
+                height: 40px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                padding: 0px 10px 0px 10px;
+                margin: 10px 0px 10px 0px;
+            }
+
+            button{
+                height: 40px;
+                width:calc(100% - 80px - 10%);
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                padding: 0px 10px 0px 10px;
+                margin: 10px 0px 10px 0px;
+                background-color: #00bcd4;
+                color: #fff;
+                font-weight: bold;
+                font-size: 20px;
+                cursor: pointer;
+            }
+            p.err{
+                color: red;
+                font-size: 20px;
+                margin: 0px 0px 0px 10px;
+            }
+        }
+
+        div.about-text:first-of-type, div.examples-text:first-of-type{
+            margin-top: 0px;
+        }
+    }
+}

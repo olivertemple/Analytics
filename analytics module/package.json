@@ -1,0 +1,20 @@
+{
+  "name": "@oliver-temple/analytics",
+  "version": "1.1.0",
+  "description": "Analytics Library",
+  "main": "Analytics.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oliver Temple",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^9.6.4",
+    "get-browser-fingerprint": "^2.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "analytics"
+  ]
+}

@@ -1,0 +1,92 @@
+.project-container{
+    margin: 70px 5%;
+    
+    .project-name{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .back{
+           cursor: pointer; 
+        }  
+        h2{
+            margin-left: 10px;
+        }
+    }
+
+    .timeframe-options{
+        display: flex;
+        flex-direction: row;
+        border: 1px solid black;
+        width: max-content;
+        border-radius: 5px;
+        .timeframe-option{
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .timeframe-option:hover:not(.active){
+            background-color: #e6e6e6;
+        }
+        .active{
+            background-color: #b1afaf;
+        }
+    }
+    .date{
+        margin-left: 10px;
+        margin-top: 10px;
+        padding: 5px;
+        border: 1px solid;
+        border-radius: 5px;
+    }
+    .date:first-of-type{
+        margin-left: 0px;
+    }
+
+    .data{
+        width: 100%;
+        .data-container{
+            width: 100%;
+            .charts{
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                margin-top: 10px;
+                .clicks, .visits, .load-time, .unique-visits, .core-web-vitals, .TTFB{
+                    width:48%;
+                    margin: 0px 1%;
+                    margin-top: 10px;
+                }
+                .TTFB{
+                    div{
+                        margin-top: calc(18.72px + 40.71px);
+                    }
+                }
+                .core-web-vitals-avg{
+                    display: flex;
+                    flex-direction: row;
+
+                    h4{
+                        margin-top: 0px;
+                        margin-left: 15px;
+                    }
+
+                    .good{
+                        color: #00aa00;
+                    }
+                    .bad{
+                        color: #ff0000;
+                    }
+                    .okay{
+                        color: #ffa500;
+                    }
+                }
+
+                @media screen and (max-width:1000px) { 
+                    .visits, .clicks, .load-time, .unique-visits, .core-web-vitals, .TTFB{
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
