@@ -147,6 +147,20 @@ export default function Homepage(props){
             </div>
         )
     }
+
+    const render = () => {
+        if (typeof window !== undefined) {
+            let hash = window.location.hash;
+
+            if (hash === "#login"){
+                return renderLogin();
+            }else if (hash === "#signup"){
+                return renderSignup();
+            }else{
+                return renderPage();
+            }
+        }
+    }
     return(
         <div className="homepage">
             <nav>
@@ -170,7 +184,7 @@ export default function Homepage(props){
                     </li>
                 </ul>
             </nav>
-            {typeof window !== undefined ? (window.location.hash === "#login" ? renderLogin() : typeof window !== undefined ? (window.location.hash === "#signup" ? renderSignup() : renderPage()) : null) : null}
+            {render()}
         </div>
     )
 }
