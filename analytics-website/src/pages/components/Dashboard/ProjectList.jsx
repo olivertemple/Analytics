@@ -4,6 +4,13 @@ import ProjectCard from "./ProjectCard";
 export default function ProjectList(props){
     let projects = props.projects;
 
+    if (projects.length === 0){
+        return (
+            <div>
+                <p>No projects</p>
+            </div>
+        )
+    }
     return(
         projects.map((project, index) => {
             let hrs_24 = + new Date() - 1000*60*60*24;
