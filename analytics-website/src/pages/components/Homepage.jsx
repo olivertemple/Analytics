@@ -170,7 +170,7 @@ export default function Homepage(props){
                     </li>
                 </ul>
             </nav>
-            {typeof window !== undefined ? (window.location.hash === "#login" ? renderLogin() : window.location.hash === "#signup" ? renderSignup() : renderPage()) : null}
+            {typeof window !== undefined ? (window.location.hash === "#login" ? renderLogin() : typeof window !== undefined ? (window.location.hash === "#signup" ? renderSignup() : renderPage()) : null) : null}
         </div>
     )
 }
