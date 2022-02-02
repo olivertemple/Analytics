@@ -21,7 +21,10 @@ export default function ProjectCard(props){
     }
 
     const get_chart_data = () => {
-        let data = {};
+        let data = {}; 
+        if (!props.visits){
+            return [];
+        }
         props.visits.forEach(visit => {
             let dt = visit.dt - (visit.dt % (1000*60));
             if (data[dt]){

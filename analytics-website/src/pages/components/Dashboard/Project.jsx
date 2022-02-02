@@ -56,6 +56,10 @@ export default class Project extends React.Component{
     }
 
     getDataForTimeframe(){
+        if (!this.props.project){
+            let temp = [];
+            return { temp, temp }
+        }
         let startDate;
         let endDate;
         if (this.state.active === "24hrs"){
