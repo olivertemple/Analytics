@@ -1,5 +1,5 @@
 import * as React from "react"
-import app from "./components/FirebaseInit";
+import getFirebase from "./components/FirebaseInit";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { getDatabase, ref, set, push, onValue, get, remove} from "firebase/database";
 import Homepage from "./components/Homepage";
@@ -15,6 +15,7 @@ class IndexPage extends React.Component{
       uid:null,
       user: null
     }
+    const app = getFirebase();
     this.user = null
     this.auth = getAuth(app);
     this.db = getDatabase(app);
