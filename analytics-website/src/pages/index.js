@@ -15,6 +15,12 @@ class IndexPage extends React.Component{
       uid:null,
       user: null
     }
+    
+    this.sign_in = this.sign_in.bind(this);
+    this.create_user = this.create_user.bind(this);
+  }
+
+  componentDidMount(){
     const app = getFirebase();
     this.user = null
     this.auth = getAuth(app);
@@ -38,8 +44,6 @@ class IndexPage extends React.Component{
       }
     })
     
-    this.sign_in = this.sign_in.bind(this);
-    this.create_user = this.create_user.bind(this);
   }
 
   async create_user(email, password){
