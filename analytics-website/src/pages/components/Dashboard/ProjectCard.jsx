@@ -56,11 +56,11 @@ export default function ProjectCard(props){
                     <h4>Past 24hrs</h4>
                     <div className="clicks">
                         <h4>Clicks</h4>
-                        <p>Total: {props.clicks.length}</p>
+                        <p>Total: {props.clicks ? props.clicks.length : "No Data"}</p>
                     </div>
                     <div className="visits">
                         <h4>Visits</h4>
-                        <p>Total: {props.visits.length}</p>
+                        <p>Total: {props.visits ? props.visits.length : "No Data"}</p>
                     </div>
                     <div className="bounce-rate">
                         <h4>Bounce Rate</h4>
