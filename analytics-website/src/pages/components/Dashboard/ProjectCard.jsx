@@ -4,6 +4,9 @@ import { LineChart, Line, Tooltip, XAxis,ResponsiveContainer } from 'recharts';
 export default function ProjectCard(props){
     const calculate_bounce_rate = () => {
         let bounced = 0;
+        if (!props.visits){
+            return 0;
+        }
         let total = props.visits.length;
         if (total === 0){
             return 0;
