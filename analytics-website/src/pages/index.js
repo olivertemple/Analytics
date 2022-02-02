@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { getDatabase, ref, set, push, onValue, get, remove} from "firebase/database";
 import Homepage from "./components/Homepage";
 import Dashboard from "./components/Dashboard/Dashboard";
-import { Analytics } from "../../../analytics module/Analytics";
+// import { Analytics } from "../../../analytics module/Analytics";
 
 // markup
 class IndexPage extends React.Component{
@@ -19,8 +19,8 @@ class IndexPage extends React.Component{
     this.auth = getAuth(app);
     this.db = getDatabase(app);
 
-    let analytics = new Analytics("-MuuNvD3marUTYuCQRBW");
-    analytics.clicks();
+    // let analytics = new Analytics("-MuuNvD3marUTYuCQRBW");
+    // analytics.clicks();
 
     onAuthStateChanged(this.auth, user => {
       if (user){
