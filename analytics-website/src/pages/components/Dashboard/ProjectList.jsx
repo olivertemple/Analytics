@@ -4,7 +4,7 @@ import ProjectCard from "./ProjectCard";
 export default function ProjectList(props){
     let projects = props.projects;
 
-    if (projects.length === 0){
+    if (!projects){
         return (
             <div>
                 <p>No projects</p>
