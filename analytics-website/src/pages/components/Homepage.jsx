@@ -149,7 +149,7 @@ export default function Homepage(props){
     }
 
     const render = () => {
-        if (typeof window !== undefined) {
+        if (typeof window !== "undefined") {
             let hash = window.location.hash;
 
             if (hash === "#login"){
