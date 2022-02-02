@@ -376,7 +376,7 @@ export default class Project extends React.Component{
             <div className="project-container">
                 <div className="project-name">
                     <BiArrowBack className="back" size={20} onClick={this.props.back}/>
-                    <h2>{this.props.project.name}</h2>
+                    <h2>{this.props.project ? this.props.project.name : "No Data"}</h2>
                 </div>
                 <div className="timeframe-select">
                     <h3>Timeframe</h3>
