@@ -32,7 +32,7 @@ export default function Homepage(props){
         }else if (code === "auth/too-many-requests"){
             setErr("Too many failed attempts, try again later");
         }else if (message === "success"){
-            window.location.hash = "";
+            if (typeof window !== undefined) {window.location.hash = ""};
         }
     }
 
@@ -52,7 +52,7 @@ export default function Homepage(props){
             } else if (code === "auth/weak-password"){
                 setErr("Password is too weak, try a stronger one");
             }else if (message === "success"){
-                window.location.hash = "";
+                if (typeof window !== undefined) {window.location.hash = ""};
             }
         }else{
             if (password1 !== password2){
@@ -170,7 +170,7 @@ export default function Homepage(props){
                     </li>
                 </ul>
             </nav>
-            {window.location.hash === "#login" ? renderLogin() : window.location.hash === "#signup" ? renderSignup() : renderPage()}
+            {typeof window !== undefined ? window.location.hash === "#login" ? renderLogin() : window.location.hash === "#signup" ? renderSignup() : renderPage() : null}
         </div>
     )
 }
