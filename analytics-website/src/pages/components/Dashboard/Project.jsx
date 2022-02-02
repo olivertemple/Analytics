@@ -2,7 +2,7 @@ import React from "react";
 import "../../styles/Project.scss";
 import { BiArrowBack } from "react-icons/bi";
 import { LineChart, Line, Tooltip, XAxis,ResponsiveContainer, ComposedChart } from 'recharts';
-
+import { IoMdOpen } from "react-icons/io";
 export default class Project extends React.Component{
     constructor(props){
         super(props);
@@ -15,13 +15,18 @@ export default class Project extends React.Component{
             clicksTotal: 0,
             visitsTotal: 0,
             loadAvg: 0,
-            countries: []
+            countries: [],
+            os: [],
+            device_types: [],
+            popup: null,
+            visits_expanded: false,
         }
         this.formatter = this.formatter.bind(this);
         this.getDataForCharts = this.getDataForCharts.bind(this);
         this.setActive = this.setActive.bind(this);
         this.setStartDate = this.setStartDate.bind(this);
         this.setEndDate = this.setEndDate.bind(this);
+        this.copy = this.copy.bind(this);
     }
 
     componentDidMount(){
@@ -77,7 +82,7 @@ export default class Project extends React.Component{
         }
 
         let clicks = [];
-        if (Object.values(this.props.project.clicks).length > 0){
+        if (this.props.project.clicks && Object.values(this.props.project.clicks).length > 0){
             clicks = Object.values(this.props.project.clicks).filter(click => {
                 if (click.dt > startDate && click.dt < endDate){
                     return click;
@@ -86,7 +91,7 @@ export default class Project extends React.Component{
         }
         
         let visits = [];
-        if (Object.values(this.props.project.clicks).length > 0){
+        if (this.props.project.visits && Object.values(this.props.project.visits).length > 0){
             visits = Object.values(this.props.project.visits).filter(visit => {
                 if (visit.dt > startDate && visit.dt < endDate){
                     return visit;
@@ -106,7 +111,8 @@ export default class Project extends React.Component{
         let uniqueVisitsObj = {};
         let coreWebVitalsObj = {};
         let countries = [];
-
+        let device_types = [];
+        let OS = [];
 
         let divisor;
         switch (this.state.active){
@@ -138,6 +144,14 @@ export default class Project extends React.Component{
 
             if (!countries.includes(visit.country)){
                 countries.push(visit.country);
+            }
+
+            if (!device_types.includes(visit.device_type)){
+                device_types.push(visit.device_type);
+            }
+
+            if (!OS.includes(visit.OS)){
+                OS.push(visit.OS);
             }
             
             if (!visitsDataObj[dt]){
@@ -215,7 +229,6 @@ export default class Project extends React.Component{
             }
         })
 
-
         let values = Object.values(clicksDataObj);
         let keys = Object.keys(clicksDataObj);
         let clicksData = [];
@@ -242,12 +255,35 @@ export default class Project extends React.Component{
                     obj[visit.country] = 1;
                 }
 
+                if (obj[visit.device_type]){
+                    obj[visit.device_type]++;
+                }else{
+                    obj[visit.device_type] = 1;
+                }
+
+                if (obj[visit.OS]){
+                    obj[visit.OS]++;
+                }else{
+                    obj[visit.OS] = 1;
+                }
+
             })
 
             let objKeys = Object.keys(obj);
             countries.forEach(country => {
                 if (!objKeys.includes(country)){
                     obj[country] = 0;
+                }
+            })
+            OS.forEach(os => {
+                if (!objKeys.includes(os)){
+                    obj[os] = 0;
+                }
+            })
+
+            device_types.forEach(device_type => {
+                if (!objKeys.includes(device_type)){
+                    obj[device_type] = 0;
                 }
             })
 
@@ -324,7 +360,7 @@ export default class Project extends React.Component{
         let avgLCP = (sumLCP / numLCP).toFixed(2);
         let avgTTFB = (sumTTFB / numTTFB).toFixed(2);
         let avgFID = (sumFID / numFID).toFixed(2);
-
+        console.log(device_types)
         this.setState({
             clicksData: clicksData,
             visitsData: visitsData,
@@ -340,7 +376,9 @@ export default class Project extends React.Component{
             avgTTFB: avgTTFB,
             avgFID: avgFID,
             loadAvg: loadData.reduce((a,b) => a + b.load_time, 0)/loadData.length,
-            countries: countries
+            countries: countries,
+            os: OS,
+            device_types: device_types,
         })
     }
 
@@ -370,13 +408,46 @@ export default class Project extends React.Component{
         return colour;
     }
 
+    copy(){
+        if (!this.props.project || typeof navigator === 'undefined'){
+            return null;
+        }
+        let code = this.props.project.id_code;
+        navigator.clipboard.writeText(code);
+        this.setState({popup: "Project ID copied to clipboard"})
+        setTimeout(() => {
+            this.setState({popup: null})
+        }, 1000);
+    }
+
+    renderVisitsToolTip({active, payload}){
+        if (active){
+            return (
+                <div className="tooltip">
+                    <p>{payload[0].payload.country}</p>
+                    <p>{payload[0].payload.visits}</p>
+                </div>
+            )
+        }
+    }
+
     render(){
         console.log(this.props)
         return(
             <div className="project-container">
-                <div className="project-name">
-                    <BiArrowBack className="back" size={20} onClick={this.props.back}/>
-                    <h2>{this.props.project ? this.props.project.name : "No Data"}</h2>
+                <div className="project-name" >
+                    <div className="row"onClick={this.props.back}>
+                        <BiArrowBack className="back" size={20}/>
+                        <h2>{this.props.project ? this.props.project.name : "No Data"}</h2>
+                    </div>
+                    <div className="col">
+                        <h3 onClick={this.copy}>Project ID: {this.props.project ? this.props.project.id_code : "No Data for Project Code"}</h3>
+                        <div className="row">
+                            <a href={this.props.project.url} target="_blank" rel="noopener noreferrer">{this.props.project ? this.props.project.url : "No Data for Project Url"}</a>
+                            <IoMdOpen />
+                        </div>
+                    </div>
+                    
                 </div>
                 <div className="timeframe-select">
                     <h3>Timeframe</h3>
@@ -418,6 +489,10 @@ export default class Project extends React.Component{
                             </div>
                             <div className="visits">
                                 <h3>Visits: {this.state.visitsTotal}</h3>
+                                <div className="row">
+                                    <label htmlFor="checkbox">Show Device Info</label>
+                                    <input id="checkbox" type="checkbox" onClick={() => {this.setState({visits_expanded: !this.state.visits_expanded})}}/>
+                                </div>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <LineChart data={this.state.visitsData}>
                                         <Line type="monotone" dataKey="visits" stroke="blue" dot={false} />
@@ -426,8 +501,18 @@ export default class Project extends React.Component{
                                                 return <Line key={i} type="monotone" dataKey={country} stroke={this.stringToColour(country)} dot={false} />
                                             })
                                         }
+                                        {
+                                            this.state.visits_expanded ? this.state.os.map((item, i) => {
+                                                return <Line key={i} type="monotone" dataKey={item} stroke={this.stringToColour(item)} dot={false} />
+                                            }) : null
+                                        }
+                                        {
+                                            this.state.visits_expanded ? this.state.device_types.map((item, i) => {
+                                                return <Line key={i} type="monotone" dataKey={item} stroke={this.stringToColour(item)} dot={false} />
+                                            }) : null
+                                        }
                                         <XAxis dataKey="dt" tickFormatter={this.formatter}/>
-                                        <Tooltip labelFormatter={this.formatter}/>
+                                        <Tooltip labelFormatter={this.formatter} />
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
@@ -488,6 +573,9 @@ export default class Project extends React.Component{
                         </div>
                       
                     </div>
+                </div>
+                <div className="popup" >
+                    {this.state.popup ? <p>{this.state.popup}</p> : null}
                 </div>
             </div>
         )

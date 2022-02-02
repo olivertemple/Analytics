@@ -18,6 +18,7 @@ class IndexPage extends React.Component{
     
     this.sign_in = this.sign_in.bind(this);
     this.create_user = this.create_user.bind(this);
+    this.sign_out = this.sign_out.bind(this);
   }
 
   componentDidMount(){
@@ -94,6 +95,7 @@ class IndexPage extends React.Component{
             sign_out={this.sign_out}
             db = {this.db}
             auth = {this.auth}
+            logout={this.sign_out}
           /> 
         :<Homepage
           sign_in={this.sign_in}

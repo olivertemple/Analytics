@@ -13,6 +13,7 @@ export default class Dashboard extends React.Component{
             createNew:false,
             newProjectKey: null,
             newProjectName: "",
+            newProjectUrl: "",
             activeProject: null,
         }
 
@@ -35,7 +36,10 @@ export default class Dashboard extends React.Component{
                     let project_data = await get(ref(this.props.db, `projects/${project_id}`));
                     if (project_data.exists()){
                         project_data = project_data.val();
+                        project_data.id_code = project_id;
                         projects.push(project_data);
+                    }else{
+                        console.log(project_data)
                     }
                 }))
                 console.log(projects);
@@ -54,7 +58,8 @@ export default class Dashboard extends React.Component{
 
     createNewProject(){
         push(ref(this.props.db, `projects/`), {
-            name: this.state.newProjectName
+            name: this.state.newProjectName,
+            url: this.state.newProjectUrl,
         }).then(res => {
             let key = res.key;
 
@@ -72,6 +77,7 @@ export default class Dashboard extends React.Component{
                 <div className="project-cart-header">
                     <h3>Create new project</h3>
                     <input type="text" placeholder="Project name" className="new-project-name" onChange={(e) => {this.setState({newProjectName:e.target.value})}}/>
+                    <input type="text" placeholder="Website url" className="new-project-url" onChange={(e) => {this.setState({newProjectUrl:e.target.value})}}/>
                 </div>
                 <div className="project-card-content">
                     <button className="create-new-project" onClick={this.createNewProject}>Create</button>
@@ -89,6 +95,7 @@ export default class Dashboard extends React.Component{
             <section className="Dashboard">
                <div className="header">
                     <h1>Welcome {this.state.name}</h1>
+                    <button className="logout" onClick={this.props.logout}>Logout</button>
                </div>
                {!this.state.activeProject ? (
                 <div className="projects">

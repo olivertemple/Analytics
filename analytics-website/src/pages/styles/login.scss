@@ -34,7 +34,7 @@ section.login, section.signup {
 
             button{
                 height: 40px;
-                width:calc(100% - 80px - 10%);
+                width:max-content;
                 border-radius: 5px;
                 border: 1px solid #ccc;
                 padding: 0px 10px 0px 10px;
