@@ -89,10 +89,23 @@
                 flex-direction: row;
                 flex-wrap: wrap;
                 margin-top: 10px;
-                .clicks, .visits, .load-time, .unique-visits, .core-web-vitals, .TTFB{
+                .clicks, .visits, .load-time, .unique-visits, .core-web-vitals, .TTFB, .visits-by-os, .visits-by-device-type, .visits-by-country{
                     width:48%;
                     margin: 0px 1%;
                     margin-top: 10px;
+
+                    .recharts-sector{
+                        cursor: pointer;
+                    }
+
+                    .recharts-sector:hover{
+                        opacity: .7;
+                    }
+
+                    .custom-tooltip{
+                        border-radius: 5px;
+                        padding: 10px 15px;
+                    }
                 }
                 .visits{
                     div.row{
@@ -112,11 +125,7 @@
                         margin-top: calc(18.72px + 40.71px);
                     }
                 }
-                .clicks{
-                    div{
-                        margin-top: calc(21px + 18.72px);
-                    }
-                }
+
                 .core-web-vitals-avg{
                     display: flex;
                     flex-direction: row;
@@ -138,7 +147,7 @@
                 }
 
                 @media screen and (max-width:1000px) { 
-                    .visits, .clicks, .load-time, .unique-visits, .core-web-vitals, .TTFB{
+                    .visits, .clicks, .load-time, .unique-visits, .core-web-vitals, .TTFB , .visits-by-os, .visits-by-device-type, .visits-by-country{
                         width: 100%;
                     }
                 }

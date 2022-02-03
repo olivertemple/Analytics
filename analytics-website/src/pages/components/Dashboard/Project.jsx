@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/Project.scss";
 import { BiArrowBack } from "react-icons/bi";
-import { LineChart, Line, Tooltip, XAxis,ResponsiveContainer, ComposedChart } from 'recharts';
+import { LineChart, Line, Tooltip, XAxis,ResponsiveContainer, PieChart, Pie, Cell} from 'recharts';
 import { IoMdOpen } from "react-icons/io";
 export default class Project extends React.Component{
     constructor(props){
@@ -16,8 +16,9 @@ export default class Project extends React.Component{
             visitsTotal: 0,
             loadAvg: 0,
             countries: [],
-            os: [],
-            device_types: [],
+            visitsByOS: [],
+            visitsByCountry: [],
+            visitsByDeviceType: [],
             popup: null,
             visits_expanded: false,
         }
@@ -99,11 +100,11 @@ export default class Project extends React.Component{
             })
         }
         
-        return { clicks, visits };
+        return { clicks, visits, startDate, endDate };
     }
 
     getDataForCharts(){
-        let { clicks, visits } = this.getDataForTimeframe();
+        let { clicks, visits, startDate, endDate } = this.getDataForTimeframe();
         let clicksDataObj = {};
         let visitsDataObj = {};
         let loadDataObj = {};
@@ -111,8 +112,9 @@ export default class Project extends React.Component{
         let uniqueVisitsObj = {};
         let coreWebVitalsObj = {};
         let countries = [];
-        let device_types = [];
-        let OS = [];
+        let OSDataObj = {};
+        let deviceTypeDataObj = {};
+        let visitsByCountryObj = {};
 
         let divisor;
         switch (this.state.active){
@@ -130,6 +132,10 @@ export default class Project extends React.Component{
                 break;
         }
 
+        for (let dt = startDate; dt < endDate; dt += divisor){
+            
+        }
+
         clicks.forEach(click => {
             let dt = click.dt - (click.dt % divisor);
             if (!clicksDataObj[dt]){
@@ -145,19 +151,29 @@ export default class Project extends React.Component{
             if (!countries.includes(visit.country)){
                 countries.push(visit.country);
             }
-
-            if (!device_types.includes(visit.device_type)){
-                device_types.push(visit.device_type);
-            }
-
-            if (!OS.includes(visit.OS)){
-                OS.push(visit.OS);
-            }
             
             if (!visitsDataObj[dt]){
                 visitsDataObj[dt] = [visit];
             }else{
                 visitsDataObj[dt].push(visit);
+            }
+
+            if (!OSDataObj[visit.OS]){
+                OSDataObj[visit.OS] = 1;
+            }else{
+                OSDataObj[visit.OS]++;
+            }
+
+            if (!visitsByCountryObj[visit.country]){
+                visitsByCountryObj[visit.country] = 1;
+            }else{
+                visitsByCountryObj[visit.country]++;
+            }
+
+            if (!deviceTypeDataObj[visit.device_type]){
+                deviceTypeDataObj[visit.device_type] = 1;
+            }else{
+                deviceTypeDataObj[visit.device_type]++;
             }
 
             if (visit.load_time && visit.load_time !== NaN){
@@ -254,19 +270,6 @@ export default class Project extends React.Component{
                 }else{
                     obj[visit.country] = 1;
                 }
-
-                if (obj[visit.device_type]){
-                    obj[visit.device_type]++;
-                }else{
-                    obj[visit.device_type] = 1;
-                }
-
-                if (obj[visit.OS]){
-                    obj[visit.OS]++;
-                }else{
-                    obj[visit.OS] = 1;
-                }
-
             })
 
             let objKeys = Object.keys(obj);
@@ -275,19 +278,45 @@ export default class Project extends React.Component{
                     obj[country] = 0;
                 }
             })
-            OS.forEach(os => {
-                if (!objKeys.includes(os)){
-                    obj[os] = 0;
-                }
-            })
-
-            device_types.forEach(device_type => {
-                if (!objKeys.includes(device_type)){
-                    obj[device_type] = 0;
-                }
-            })
 
             visitsData.push(obj);
+        }
+
+        let visitsByOS = [];
+        values = Object.values(OSDataObj);
+        keys = Object.keys(OSDataObj);
+        let total = values.reduce((a, b) => (a + b));
+        for (let i = 0; i < values.length; i++){
+            visitsByOS.push({
+                OS: keys[i],
+                visits: values[i],
+                percentage: (values[i] / total) * 100
+
+            })
+        }
+
+        let visitsByCountry = [];
+        values = Object.values(visitsByCountryObj);
+        keys = Object.keys(visitsByCountryObj);
+        total = values.reduce((a, b) => (a + b));
+        for (let i = 0; i < values.length; i++){
+            visitsByCountry.push({
+                country: keys[i],
+                visits: values[i],
+                percentage: (values[i] / total) * 100
+            })
+        }
+
+        let visitsByDeviceType = [];
+        values = Object.values(deviceTypeDataObj);
+        keys = Object.keys(deviceTypeDataObj);
+        total = values.reduce((a, b) => (a + b));
+        for (let i = 0; i < values.length; i++){
+            visitsByDeviceType.push({
+                device_type: keys[i],
+                visits: values[i],
+                percentage: (values[i] / total) * 100
+            })
         }
 
         values = Object.values(uniqueVisitsObj);
@@ -355,12 +384,13 @@ export default class Project extends React.Component{
             if (data.TTFB){sumTTFB += data.TTFB; numTTFB += 1;};
             if (data.FID){sumFID += data.FID; numFID += 1;};
         })
+
         let avgCLS = (sumCLS / numCLS).toFixed(2);
         let avgFCP = (sumFCP / numFCP).toFixed(2);
         let avgLCP = (sumLCP / numLCP).toFixed(2);
         let avgTTFB = (sumTTFB / numTTFB).toFixed(2);
         let avgFID = (sumFID / numFID).toFixed(2);
-        console.log(device_types)
+
         this.setState({
             clicksData: clicksData,
             visitsData: visitsData,
@@ -377,8 +407,9 @@ export default class Project extends React.Component{
             avgFID: avgFID,
             loadAvg: loadData.reduce((a,b) => a + b.load_time, 0)/loadData.length,
             countries: countries,
-            os: OS,
-            device_types: device_types,
+            visitsByOS:visitsByOS,
+            visitsByDeviceType:visitsByDeviceType,
+            visitsByCountry: visitsByCountry,
         })
     }
 
@@ -420,15 +451,16 @@ export default class Project extends React.Component{
         }, 1000);
     }
 
-    renderVisitsToolTip({active, payload}){
-        if (active){
+    renderPieTooltip({ active, payload }){
+        if (active) {
             return (
-                <div className="tooltip">
-                    <p>{payload[0].payload.country}</p>
-                    <p>{payload[0].payload.visits}</p>
+                <div className="custom-tooltip" style={{ backgroundColor: '#ffff', padding: '5px', border: '1.5px solid #cccc' }}>
+                    <p>{`${payload[0].name} : ${payload[0].value}`}</p>
+                    <p>{`Percentage: ${payload[0].payload.percentage.toFixed(2)} %`}</p>
                 </div>
-            )
+            );
         }
+        return null;
     }
 
     render(){
@@ -443,7 +475,7 @@ export default class Project extends React.Component{
                     <div className="col">
                         <h3 onClick={this.copy}>Project ID: {this.props.project ? this.props.project.id_code : "No Data for Project Code"}</h3>
                         <div className="row">
-                            <a href={this.props.project.url} target="_blank" rel="noopener noreferrer">{this.props.project ? this.props.project.url : "No Data for Project Url"}</a>
+                            <a href={this.props.project ? this.props.project.url : ""} target="_blank" rel="noopener noreferrer">{this.props.project ? this.props.project.url : "No Data for Project Url"}</a>
                             <IoMdOpen />
                         </div>
                     </div>
@@ -489,10 +521,6 @@ export default class Project extends React.Component{
                             </div>
                             <div className="visits">
                                 <h3>Visits: {this.state.visitsTotal}</h3>
-                                <div className="row">
-                                    <label htmlFor="checkbox">Show Device Info</label>
-                                    <input id="checkbox" type="checkbox" onClick={() => {this.setState({visits_expanded: !this.state.visits_expanded})}}/>
-                                </div>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <LineChart data={this.state.visitsData}>
                                         <Line type="monotone" dataKey="visits" stroke="blue" dot={false} />
@@ -501,19 +529,42 @@ export default class Project extends React.Component{
                                                 return <Line key={i} type="monotone" dataKey={country} stroke={this.stringToColour(country)} dot={false} />
                                             })
                                         }
-                                        {
-                                            this.state.visits_expanded ? this.state.os.map((item, i) => {
-                                                return <Line key={i} type="monotone" dataKey={item} stroke={this.stringToColour(item)} dot={false} />
-                                            }) : null
-                                        }
-                                        {
-                                            this.state.visits_expanded ? this.state.device_types.map((item, i) => {
-                                                return <Line key={i} type="monotone" dataKey={item} stroke={this.stringToColour(item)} dot={false} />
-                                            }) : null
-                                        }
                                         <XAxis dataKey="dt" tickFormatter={this.formatter}/>
                                         <Tooltip labelFormatter={this.formatter} />
                                     </LineChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className="visits-by-os">
+                                <h3>Visits by OS</h3>
+                                <ResponsiveContainer width="100%" height={200}>
+                                    <PieChart >
+                                        <Pie data={this.state.visitsByOS} dataKey="visits" nameKey="OS" outerRadius={80} innerRadius={30}  >
+                                            {this.state.visitsByOS.map((entry, index) => <Cell key={index} fill={this.stringToColour(entry.OS)} payload={{percentage:entry.percentage}} />)}
+                                        </Pie>
+                                        <Tooltip content={this.renderPieTooltip}/>
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className="visits-by-device-type">
+                                <h3>Visits by Device Type</h3>
+                                <ResponsiveContainer width="100%" height={200}>
+                                    <PieChart >
+                                        <Pie data={this.state.visitsByDeviceType} dataKey="visits" nameKey="device_type" outerRadius={80} innerRadius={30} >
+                                            {this.state.visitsByDeviceType.map((entry, index) => <Cell key={index} fill={this.stringToColour(entry.device_type)} />)}
+                                        </Pie>
+                                        <Tooltip content={this.renderPieTooltip}/>
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className="visits-by-country">
+                                <h3>Visits by country</h3>
+                                <ResponsiveContainer width="100%" height={200}>
+                                    <PieChart >
+                                        <Pie data={this.state.visitsByCountry} dataKey="visits" nameKey="country" outerRadius={80} innerRadius={30} >
+                                            {this.state.visitsByCountry.map((entry, index) => <Cell key={index} fill={this.stringToColour(entry.country)} />)}
+                                        </Pie>
+                                        <Tooltip content={this.renderPieTooltip}/>
+                                    </PieChart>
                                 </ResponsiveContainer>
                             </div>
                             <div className="unique-visits">
