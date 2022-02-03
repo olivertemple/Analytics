@@ -132,10 +132,6 @@ export default class Project extends React.Component{
                 break;
         }
 
-        for (let dt = startDate; dt < endDate; dt += divisor){
-            
-        }
-
         clicks.forEach(click => {
             let dt = click.dt - (click.dt % divisor);
             if (!clicksDataObj[dt]){
@@ -143,6 +139,13 @@ export default class Project extends React.Component{
             }else{
                 clicksDataObj[dt]++;
             }
+        })
+
+        let clicksData = Object.keys(clicksDataObj).map(key => {
+            return ({
+                dt: key,
+                clicks: clicksDataObj[key]
+            })
         })
         
         visits.forEach(visit => {
@@ -183,6 +186,7 @@ export default class Project extends React.Component{
                     loadDataObj[dt] = (loadDataObj[dt] + visit.load_time)/2;
                 }
             }
+            
             if (!uniqueVisits.includes(visit.fingerprint)){
                 uniqueVisits.push(visit.fingerprint);
                 if (!uniqueVisitsObj[dt]){
@@ -245,26 +249,65 @@ export default class Project extends React.Component{
             }
         })
 
-        let values = Object.values(clicksDataObj);
-        let keys = Object.keys(clicksDataObj);
-        let clicksData = [];
-        for (let i = 0; i < values.length; i++){
-            clicksData.push({
-                dt: keys[i],
-                clicks: values[i]
-            })
-        }
-
-        values = Object.values(visitsDataObj);
-        keys = Object.keys(visitsDataObj);
-
-        let visitsData = [];
-        for (let i = 0; i < values.length; i++){
+        let visitsData = Object.keys(visitsDataObj).map(key => {
             let obj = {
-                dt: keys[i],
-                visits: values[i].length,
+                dt: key,
+                visits: visitsDataObj[key].length,
+            };
+
+            visitsDataObj[key].forEach(visit => {
+                if (!obj[visit.country]){
+                    obj[visit.country] = 1;
+                }else{
+                    obj[visit.country]++;
+                }
+            })
+
+            countries.forEach(country => {
+                if (!Object.keys(obj).includes(country)){
+                    obj[country] = 0;
+                }
+            })
+
+            return obj;
+        })
+
+        let total = Object.values(OSDataObj).reduce((a, b) => (a + b));
+        let visitsByOS = Object.keys(OSDataObj).map(key => {
+            return ({
+                OS: key,
+                visits: OSDataObj[key],
+                percentage: (OSDataObj[key] / total) * 100
+            })
+        })
+
+        total = Object.values(visitsByCountryObj).reduce((a, b) => (a + b));
+        let visitsByCountry = Object.keys(visitsByCountryObj).map(key => {
+            return({
+                country: key,
+                visits: visitsByCountryObj[key],
+                percentage: (visitsByCountryObj[key] / total) * 100
+            })
+        })
+
+        total = Object.values(deviceTypeDataObj).reduce((a, b) => (a + b));
+        let visitsByDeviceType = Object.keys(deviceTypeDataObj).map(key => {
+            return({
+                device_type: key,
+                visits: deviceTypeDataObj[key],
+                percentage: (deviceTypeDataObj[key] / total) * 100
+            })
+        })
+
+        let values = Object.values(uniqueVisitsObj);
+        let keys = Object.keys(uniqueVisitsObj);
+        let uniqueVisitsData = keys.map((key, index) => {
+            let obj = {
+                dt: key,
+                visits: values[index].length,
             }
-            values[i].forEach(visit => {
+
+            uniqueVisitsObj[key].forEach(visit => {
                 if (obj[visit.country]){
                     obj[visit.country]++;
                 }else{
@@ -279,97 +322,26 @@ export default class Project extends React.Component{
                 }
             })
 
-            visitsData.push(obj);
-        }
-
-        let visitsByOS = [];
-        values = Object.values(OSDataObj);
-        keys = Object.keys(OSDataObj);
-        let total = values.reduce((a, b) => (a + b));
-        for (let i = 0; i < values.length; i++){
-            visitsByOS.push({
-                OS: keys[i],
-                visits: values[i],
-                percentage: (values[i] / total) * 100
-
+            return obj;
+        });
+       
+        let loadData = Object.keys(loadDataObj).map((key, _) => {
+            return ({
+                dt: key,
+                load_time: loadDataObj[key]
             })
-        }
-
-        let visitsByCountry = [];
-        values = Object.values(visitsByCountryObj);
-        keys = Object.keys(visitsByCountryObj);
-        total = values.reduce((a, b) => (a + b));
-        for (let i = 0; i < values.length; i++){
-            visitsByCountry.push({
-                country: keys[i],
-                visits: values[i],
-                percentage: (values[i] / total) * 100
-            })
-        }
-
-        let visitsByDeviceType = [];
-        values = Object.values(deviceTypeDataObj);
-        keys = Object.keys(deviceTypeDataObj);
-        total = values.reduce((a, b) => (a + b));
-        for (let i = 0; i < values.length; i++){
-            visitsByDeviceType.push({
-                device_type: keys[i],
-                visits: values[i],
-                percentage: (values[i] / total) * 100
-            })
-        }
-
-        values = Object.values(uniqueVisitsObj);
-        keys = Object.keys(uniqueVisitsObj);
-        let uniqueVisitsData = [];
-        for (let i = 0; i < values.length; i++){
-            let obj = {
-                dt: keys[i],
-                unique_visits: values[i].length
-            }
-            values[i].forEach(visit => {
-                if (obj[visit.country]){
-                    obj[visit.country]++;
-                }else{
-                    obj[visit.country] = 1;
-                }
-            })
-
-            let objKeys = Object.keys(obj);
-            countries.forEach(country => {
-                if (!objKeys.includes(country)){
-                    obj[country] = 0;
-                }
-            })
-
-            uniqueVisitsData.push(obj);
-        }
+        });
     
-        values = Object.values(loadDataObj);
-        keys = Object.keys(loadDataObj);
-        let loadData = [];
-        for (let i = 0; i < values.length; i++){
-            loadData.push({
-                dt: keys[i],
-                load_time: values[i]
+        let coreWebVitalsData = Object.keys(coreWebVitalsObj).map((key, _) => {
+            return ({
+                dt: key,
+                CLS: coreWebVitalsObj[key].CLS,
+                FCP: coreWebVitalsObj[key].FCP,
+                LCP: coreWebVitalsObj[key].LCP,
+                TTFB: coreWebVitalsObj[key].TTFB,
+                FID: coreWebVitalsObj[key].FID
             })
-        }
-
-        
-
-        values = Object.values(coreWebVitalsObj);
-        keys = Object.keys(coreWebVitalsObj);
-        let coreWebVitalsData = [];
-        for (let i = 0; i < values.length; i++){
-            coreWebVitalsData.push({
-                dt: keys[i],
-                CLS: values[i].CLS,
-                FCP: values[i].FCP,
-                LCP: values[i].LCP,
-                TTFB: values[i].TTFB,
-                FID: values[i].FID
-            })
-        }
+        });
        
         let sumCLS = 0; let numCLS = 0;
         let sumFCP = 0; let numFCP = 0;
