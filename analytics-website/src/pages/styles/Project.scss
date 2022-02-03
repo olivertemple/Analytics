@@ -1,5 +1,4 @@
 .project-container{
-    margin: 70px 5%;
     display: flex;
     flex-direction: column;
     .popup{
@@ -89,7 +88,7 @@
                 flex-direction: row;
                 flex-wrap: wrap;
                 margin-top: 10px;
-                .clicks, .visits, .load-time, .unique-visits, .core-web-vitals, .TTFB, .visits-by-os, .visits-by-device-type, .visits-by-country{
+                .line-chart, .pie-chart{
                     width:48%;
                     margin: 0px 1%;
                     margin-top: 10px;
@@ -106,6 +105,10 @@
                         border-radius: 5px;
                         padding: 10px 15px;
                     }
+                }
+
+                .pie-chart{
+                    width: 23%;
                 }
                 .visits{
                     div.row{

@@ -3,6 +3,9 @@ import { getDatabase, ref, set, push, onValue, get, remove} from "firebase/datab
 import "../../styles/Dashboard.scss";
 import ProjectList from "./ProjectList";
 import Project from "./Project";
+import { GrProjects } from "react-icons/gr";
+import { FiSettings } from "react-icons/fi";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 export default class Dashboard extends React.Component{
     constructor(props){
@@ -15,11 +18,14 @@ export default class Dashboard extends React.Component{
             newProjectName: "",
             newProjectUrl: "",
             activeProject: null,
+            screen: "projects",
+            menu: false
         }
 
         this.createNewProject = this.createNewProject.bind(this);
         this.startCreateNewProject = this.startCreateNewProject.bind(this);
         this.setActiveProject = this.setActiveProject.bind(this);
+        this.showMenu = this.showMenu.bind(this);
     }
 
     componentDidMount(){
@@ -80,7 +86,7 @@ export default class Dashboard extends React.Component{
                     <input type="text" placeholder="Website url" className="new-project-url" onChange={(e) => {this.setState({newProjectUrl:e.target.value})}}/>
                 </div>
                 <div className="project-card-content">
-                    <button className="create-new-project" onClick={this.createNewProject}>Create</button>
+                    <button onClick={this.createNewProject}>Create</button>
                 </div>
             </div>
         )
@@ -90,36 +96,63 @@ export default class Dashboard extends React.Component{
         this.setState({activeProject:this.state.projects[index]})
     }
 
+    showMenu(){
+        this.setState({
+            menu:true
+        })
+    }
+
+    renderMainContent(){
+        if (this.state.screen === "projects"){
+            if (this.state.activeProject){
+                return <Project
+                    project={this.state.activeProject}
+                    back={() => {this.setActiveProject(null)}}
+                />
+            }else{
+                return (
+                    <div className="projects">
+                        <div className="projects-list">
+                            <ProjectList projects={this.state.projects} setActiveProject={this.setActiveProject} showMenu={this.showMenu}/>
+                        </div> 
+                        {this.state.createNew ? this.renderNewProject() : null}
+                        <button onClick={!this.state.createNew ? this.startCreateNewProject : (() => {
+                            this.setState({createNew:false})
+                        })}>{!this.state.createNew ? "Create new project" : "Cancel"}</button>
+                    </div>
+                )
+            }
+        }else{
+            return null
+        }
+    }
+
     render(){
         return(
             <section className="Dashboard">
-               <div className="header">
-                    <h1>Welcome {this.state.name}</h1>
-                    <button className="logout" onClick={this.props.logout}>Logout</button>
-               </div>
-               {!this.state.activeProject ? (
-                <div className="projects">
-                    <div className="title-bar">
-                        <div>
-                            <h2>Projects</h2>
-                            <p>Monitor web projects in real time</p>
+                <div className="content">
+                    <nav className="side-nav" style={{transform: this.state.menu ? null : "translateX(-100%)"}}>
+                        <div className="side-nav-header">
+                            <AiOutlineCloseCircle className="close" size={20} onClick={() => {this.setState({menu:false})}}/>
+                            <div className="side-nav-title">
+                                <h3>Welcome back {this.state.name}</h3>
+                                <button className="logout" onClick={this.props.logout}>Logout</button>
+                            </div>
+                            
                         </div>
-                        <div>
-                            <button onClick={this.startCreateNewProject}>Create new project</button>
+                        <div className="side-nav-items">
+                            <div className={`side-nav-item ${this.state.screen === "projects" ? "active" : null}`} onClick={() => {this.setState({screen:"projects"})}}>
+                                <GrProjects/>
+                                <h3>Projects</h3>
+                            </div> 
+                            <div className="side-nav-item" className={`side-nav-item ${this.state.screen === "settings" ? "active" : null}`} onClick={() => {this.setState({screen:"settings"})}}>
+                                <FiSettings/>
+                                <h3>Settings</h3>
+                            </div>  
                         </div>
-                    </div>
-                    <div className="projects-list">
-                        {this.state.createNew ? this.renderNewProject() : null}
-                        <ProjectList projects={this.state.projects} setActiveProject={this.setActiveProject}/>
-                    </div> 
+                    </nav>
+                    {this.renderMainContent()}
                 </div>
-
-               ) : 
-                <Project
-                    project={this.state.activeProject}
-                    back={() => {this.setActiveProject(null)}}
-                />}
-
             </section>
         )
     }

@@ -8,107 +8,211 @@
         margin:0;
     }
 
-    div.header{
+
+    div.content{
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        position: fixed;
-        background-color: white;
-        width: calc(100vw - 40px);
-        height: 50px;
-        padding: 10px 20px;
-        z-index: 10;
-
-        button{
-            background-color: white;
-            border: 1px solid black;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        button:hover{
-            background-color: black;
-            color: white;
-        }
-        h1{
-            font-size: 30px;
-            font-weight: bold;
-            margin: 0;
-        }
-    }
-    div.projects{
-        margin: 20px 10%;
-        margin-top: 70px;
-        div.projects-list{
-            padding: 0px 10px;
-        }
-
-        div.title-bar{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-
-            button{
-                background: rgb(126, 126, 255);
-                border: none;
-                font-size: 20px;
-                font-weight: bold;
-                cursor: pointer;
-                margin-right: 10px;
-                border-radius: 5px;
-                padding: 5px 10px;
-            }
-
-        }
-    }
-
-}
-
-.project-card{
-    border: 1px solid black;
-    padding: 10px 20px 10px 20px;
-    border-radius: 5px;
-    width: calc(100% - 40px);
-    margin-top:20px;
-    cursor: pointer;
-
-    h4, h3, p{
-        margin:0px;
-    }
-    .project-card-content{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        .overview{
-            margin: 10px 0px 0px 10px;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        nav{
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
-            div{
-                padding: 10px 10px 10px 20%;
-                text-align: left;
+            width: calc(20% + 40px);
+            height: 100%;
+            justify-content: flex-start;
+            padding-left: 0px;
+            padding-right: 0px;
+            box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px, rgb(145 158 171 / 24%) 0px 16px 32px -4px;
+            div.side-nav-header{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                padding-left: 40px;
+                margin-right: 40px;
+                .side-nav-title{
+                    display: flex;
+                    flex-direction: row;
+                    width: calc(100% - 20px);
+                    h3{
+                        margin: 0;
+                        margin-right: 10px;
+                    }
+                }
+                
+            }
+            .close{
+                display: none;
+                cursor: pointer;
+            }
+
+            div.side-nav-items{
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 20px;
+                div.side-nav-item{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: center;
+                    margin-bottom: 10px;
+                    padding: 10px 0;
+                    padding-left: 40px;
+                    padding-right: 40px;
+                    margin-left: 5px;
+                    cursor: pointer;
+                    h3{
+                        margin: 0;
+                        margin: 0 10px;
+                    }
+                }
+
+                .active{
+                    background-color: #444e8641;
+                    border-right: 3px solid #444e86;
+                    border-radius: 50px 0 0 50px;
+                }
+            }
+        }
+
+        .projects, .project-container{
+            width: calc(80% - 160px);
+            height: calc(100% - 40px);
+            padding: 20px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            margin-left: calc(20% + 80px);
+            padding-bottom : 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition-duration: .3s;
+            .projects-list{   
+                .search-bar{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    margin-bottom: 20px;
+                    margin-left: -40px;
+                    .menu{
+                        display: none;
+                        cursor: pointer;
+                    }
+                    input{
+                        width: calc(100% - 40px);
+                        margin-left: 10px;
+                        padding: 10px;
+                        border: none;
+                        border-radius: 5px;
+                        font-size: 15px;
+                    }
+                }
+            }
+            
+            .project-card{
+                box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px, rgb(145 158 171 / 24%) 0px 16px 32px -4px;
+                padding: 10px 20px 10px 20px;
+                border-radius: 15px;
+                width: calc(100% - 40px);
+                margin-top:20px;
+                cursor: pointer;
+
+                h4, h3, p{
+                    margin:0px;
+                }
+                .project-card-content{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                    .overview{
+                        margin: 10px 0px 0px 10px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-around;
+                        div{
+                            padding: 10px 10px 10px 20%;
+                            text-align: left;
+                        }
+
+                        
+                    }
+                }
+                .project-card-chart{
+                    width:70%;
+                }
+
+                @media screen and (max-width : 650px) {
+                    .project-card-chart{
+                        width:100%;
+                    }
+                }
+                
             }
 
             
         }
-    }
-    .project-card-chart{
-        width:70%;
-    }
 
-    @media screen and (max-width : 650px) {
-        .project-card-chart{
-            width:100%;
+        button{
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ffa600;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        button:hover{
+            background-color: #ff9100;
+        }
+
+        @media screen and (max-width: 1100px) {
+            nav{
+                position:absolute;
+                width: 40%;
+                transition-duration: .3s;
+
+                .close{
+                    display: block;
+                    margin: 0px 20px 0px -20px
+                }
+            }
+
+            .projects, .projects-container{
+                width: calc(100% - 40px);
+                margin-left: 0;
+
+                .projects-list{   
+                    .search-bar{
+                        margin-left: -20px; 
+                        
+                        .menu{
+                            display: block;
+                            margin-right: 20px;
+                        }
+                    }
+                }
+            }
+        
+        }
+
+        @media screen and (max-width: 650px) {
+            .side-nav{
+                width: 100%;
+            }
+        }
+        @media screen and (min-width: 1100px) {
+            nav.side-nav{
+               transform:translateX(0%) !important;
+
+            }
         }
     }
-    
 }
+
 
 .project-card:last-of-type{
     margin-bottom: 20px;
@@ -124,13 +228,3 @@
     margin: 20px 0px;
 }
 
-.create-new-project{
-    background: rgb(126, 126, 255);
-    border: none;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-right: 10px;
-    border-radius: 5px;
-    padding: 5px 10px;
-}

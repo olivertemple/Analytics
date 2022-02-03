@@ -481,7 +481,7 @@ export default class Project extends React.Component{
                 <div className="data">
                     <div className="data-container">
                         <div className="charts">
-                            <div className="clicks">
+                            <div className="clicks line-chart">
                                 <h3>Clicks: {this.state.clicksTotal}</h3>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <LineChart data={this.state.clicksData}>
@@ -491,7 +491,7 @@ export default class Project extends React.Component{
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="visits">
+                            <div className="visits line-chart">
                                 <h3>Visits: {this.state.visitsTotal}</h3>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <LineChart data={this.state.visitsData}>
@@ -506,7 +506,7 @@ export default class Project extends React.Component{
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="visits-by-os">
+                            <div className="visits-by-os pie-chart">
                                 <h3>Visits by OS</h3>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <PieChart >
@@ -517,7 +517,7 @@ export default class Project extends React.Component{
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="visits-by-device-type">
+                            <div className="visits-by-device-type pie-chart">
                                 <h3>Visits by Device Type</h3>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <PieChart >
@@ -528,7 +528,7 @@ export default class Project extends React.Component{
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="visits-by-country">
+                            <div className="visits-by-country pie-chart">
                                 <h3>Visits by country</h3>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <PieChart >
@@ -539,7 +539,7 @@ export default class Project extends React.Component{
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="unique-visits">
+                            <div className="unique-visits line-chart">
                                 <h3>Unique visits: {this.state.uniqueVisits}</h3>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <LineChart data={this.state.uniqueVisitsData}>
@@ -554,7 +554,7 @@ export default class Project extends React.Component{
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="load-time">
+                            <div className="load-time line-chart">
                                 <h3>Load Time: {this.state.loadAvg.toFixed(2)}ms</h3>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <LineChart data={this.state.loadData}>
@@ -564,7 +564,7 @@ export default class Project extends React.Component{
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="core-web-vitals">
+                            <div className="core-web-vitals line-chart">
                                 <h3>Core Web Vitals</h3>
                                 <div className="core-web-vitals-avg">
                                     <h4 className={this.state.avgCLS<= 0.1 ? "good" : this.state.avgCLS <= 0.25 ? "okay" : "bad"}>CLS: {this.state.avgCLS}</h4>
@@ -583,7 +583,7 @@ export default class Project extends React.Component{
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="TTFB">
+                            <div className="TTFB line-chart">
                                 <h3>TTFB: {this.state.avgTTFB}ms</h3>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <LineChart data={this.state.coreWebVitalsData}>
