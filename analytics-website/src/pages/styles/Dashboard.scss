@@ -16,6 +16,7 @@
         width: 100%;
         height: 100%;
         nav{
+            z-index: 20;
             display: flex;
             flex-direction: column;
             width: calc(20% + 40px);
@@ -90,25 +91,30 @@
             overflow-y: auto;
             overflow-x: hidden;
             transition-duration: .3s;
-            .projects-list{   
-                .search-bar{
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    margin-bottom: 20px;
-                    margin-left: -40px;
-                    .menu{
-                        display: none;
-                        cursor: pointer;
-                    }
-                    input{
-                        width: calc(100% - 40px);
-                        margin-left: 10px;
-                        padding: 10px;
-                        border: none;
-                        border-radius: 5px;
-                        font-size: 15px;
-                    }
+            .search-bar{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 20px;
+                z-index: 10;
+                position: fixed;
+                margin: -20px;
+                margin-left: -80px;
+                padding: 10px 20px;
+                background-color: white;
+                width: 100%;
+                box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px, rgb(145 158 171 / 24%) 0px 16px 32px -4px;
+                .menu{
+                    display: none;
+                    cursor: pointer;
+                }
+                input{
+                    width: calc(100% - 40px);
+                    margin-left: 10px;
+                    padding: 10px;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 15px;
                 }
             }
             
@@ -125,35 +131,31 @@
                 }
                 .project-card-content{
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
                     justify-content: space-between;
                     flex-wrap: wrap;
                     .overview{
                         margin: 10px 0px 0px 10px;
                         display: flex;
-                        flex-direction: column;
-                        justify-content: space-around;
+                        flex-direction: row;
+                        justify-content: space-evenly;
                         div{
-                            padding: 10px 10px 10px 20%;
-                            text-align: left;
+                            padding: 10px;
                         }
 
                         
                     }
                 }
                 .project-card-chart{
-                    width:70%;
-                }
-
-                @media screen and (max-width : 650px) {
-                    .project-card-chart{
-                        width:100%;
-                    }
+                    width:100%;
+                    height: 150px;
                 }
                 
             }
 
-            
+            .project-card:first-of-type{
+                margin-top: 60px !important;
+            }
         }
 
         button{
@@ -185,14 +187,11 @@
                 width: calc(100% - 40px);
                 margin-left: 0;
 
-                .projects-list{   
-                    .search-bar{
-                        margin-left: -20px; 
-                        
-                        .menu{
-                            display: block;
-                            margin-right: 20px;
-                        }
+                .search-bar{
+                    margin-left: 0px; 
+                    .menu{
+                        display: block;
+                        margin-right: 20px;
                     }
                 }
             }
@@ -203,6 +202,7 @@
             .side-nav{
                 width: 100%;
             }
+            
         }
         @media screen and (min-width: 1100px) {
             nav.side-nav{

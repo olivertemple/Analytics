@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import ProjectCard from "./ProjectCard";
-import { AiOutlineSearch, AiOutlineMenu } from "react-icons/ai";
 export default function ProjectList(props){
     let projects = props.projects;
-    let [search, setSearch] = useState("");
 
     if (!projects){
         return (
@@ -32,7 +30,7 @@ export default function ProjectList(props){
                 }
             })
             }   
-            if (search === "" || project.name.toLowerCase().includes(search.toLowerCase())){
+            if (props.search === "" || project.name.toLowerCase().includes(props.search.toLowerCase())){
                 return <ProjectCard key={index} name={project.name} clicks={todays_clicks} visits={todays_visits} onClick={() => {props.setActiveProject(index)}}/>
             }
         })
@@ -40,11 +38,6 @@ export default function ProjectList(props){
 
     return (
         <>
-            <div className="search-bar">
-                <AiOutlineMenu size={20} className="menu" onClick={props.showMenu}/>
-                <AiOutlineSearch size={20}/>
-                <input type="text" placeholder="Search..." value={search} onChange={(e) => {setSearch(e.target.value); props.setActiveProject(null)}}/>
-            </div>
             {renderCards()}
         </>
     )

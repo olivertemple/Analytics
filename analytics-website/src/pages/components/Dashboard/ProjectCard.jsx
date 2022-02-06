@@ -59,7 +59,6 @@ export default function ProjectCard(props){
             </div>
             <div className="project-card-content">
                 <div className="overview">
-                    <h4>Past 24hrs</h4>
                     <div className="clicks">
                         <h4>Clicks</h4>
                         <p>Total: {props.clicks ? props.clicks.length : "No Data"}</p>

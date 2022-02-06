@@ -6,6 +6,7 @@ import Project from "./Project";
 import { GrProjects } from "react-icons/gr";
 import { FiSettings } from "react-icons/fi";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineMenu } from "react-icons/ai";
 
 export default class Dashboard extends React.Component{
     constructor(props){
@@ -19,7 +20,8 @@ export default class Dashboard extends React.Component{
             newProjectUrl: "",
             activeProject: null,
             screen: "projects",
-            menu: false
+            menu: false,
+            search: "",
         }
 
         this.createNewProject = this.createNewProject.bind(this);
@@ -104,24 +106,35 @@ export default class Dashboard extends React.Component{
 
     renderMainContent(){
         if (this.state.screen === "projects"){
-            if (this.state.activeProject){
-                return <Project
-                    project={this.state.activeProject}
-                    back={() => {this.setActiveProject(null)}}
-                />
-            }else{
-                return (
-                    <div className="projects">
-                        <div className="projects-list">
-                            <ProjectList projects={this.state.projects} setActiveProject={this.setActiveProject} showMenu={this.showMenu}/>
-                        </div> 
-                        {this.state.createNew ? this.renderNewProject() : null}
-                        <button onClick={!this.state.createNew ? this.startCreateNewProject : (() => {
-                            this.setState({createNew:false})
-                        })}>{!this.state.createNew ? "Create new project" : "Cancel"}</button>
-                    </div>
-                )
-            }
+            return (
+                <div className="projects">
+                     <div className="search-bar">
+                            <AiOutlineMenu size={20} className="menu" onClick={this.showMenu}/>
+                            <AiOutlineSearch size={20}/>
+                            <input type="text" placeholder="Search..." value={this.state.search} onChange={(e) => {this.setState({search:e.target.value}); this.setActiveProject(null)}}/>
+                        </div>
+                    <div className="projects-list">
+                        {this.state.activeProject ?
+                             <Project
+                                 project={this.state.activeProject}
+                                 back={() => {this.setActiveProject(null)}}
+                             /> 
+                         :
+                            <>
+                                <ProjectList
+                                    projects={this.state.projects}
+                                    search={this.state.search}
+                                    setActiveProject={this.setActiveProject}
+                                />
+                                 {this.state.createNew ? this.renderNewProject() : null}
+                                <button onClick={!this.state.createNew ? this.startCreateNewProject : (() => {
+                                    this.setState({createNew:false})
+                                })}>{!this.state.createNew ? "Create new project" : "Cancel"}</button>
+                            </>
+                        }
+                    </div> 
+                </div>
+            )
         }else{
             return null
         }

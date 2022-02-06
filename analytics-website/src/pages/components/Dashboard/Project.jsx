@@ -116,6 +116,12 @@ export default class Project extends React.Component{
         let deviceTypeDataObj = {};
         let visitsByCountryObj = {};
 
+        if (clicks.length === 0 && visits.length === 0){
+            return;
+        }
+        
+        console.log({ clicks, visits})
+    
         let divisor;
         switch (this.state.active){
             case "24hrs":
@@ -427,7 +433,7 @@ export default class Project extends React.Component{
         if (active) {
             return (
                 <div className="custom-tooltip" style={{ backgroundColor: '#ffff', padding: '5px', border: '1.5px solid #cccc' }}>
-                    <p>{`${payload[0].name} : ${payload[0].value}`}</p>
+                    <p>{`${payload[0].name ? payload[0].name : "Unknown"} : ${payload[0].value}`}</p>
                     <p>{`Percentage: ${payload[0].payload.percentage.toFixed(2)} %`}</p>
                 </div>
             );
@@ -506,38 +512,40 @@ export default class Project extends React.Component{
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="visits-by-os pie-chart">
-                                <h3>Visits by OS</h3>
-                                <ResponsiveContainer width="100%" height={200}>
-                                    <PieChart >
-                                        <Pie data={this.state.visitsByOS} dataKey="visits" nameKey="OS" outerRadius={80} innerRadius={30}  >
-                                            {this.state.visitsByOS.map((entry, index) => <Cell key={index} fill={this.stringToColour(entry.OS)} payload={{percentage:entry.percentage}} />)}
-                                        </Pie>
-                                        <Tooltip content={this.renderPieTooltip}/>
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </div>
-                            <div className="visits-by-device-type pie-chart">
-                                <h3>Visits by Device Type</h3>
-                                <ResponsiveContainer width="100%" height={200}>
-                                    <PieChart >
-                                        <Pie data={this.state.visitsByDeviceType} dataKey="visits" nameKey="device_type" outerRadius={80} innerRadius={30} >
-                                            {this.state.visitsByDeviceType.map((entry, index) => <Cell key={index} fill={this.stringToColour(entry.device_type)} />)}
-                                        </Pie>
-                                        <Tooltip content={this.renderPieTooltip}/>
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </div>
-                            <div className="visits-by-country pie-chart">
-                                <h3>Visits by country</h3>
-                                <ResponsiveContainer width="100%" height={200}>
-                                    <PieChart >
-                                        <Pie data={this.state.visitsByCountry} dataKey="visits" nameKey="country" outerRadius={80} innerRadius={30} >
-                                            {this.state.visitsByCountry.map((entry, index) => <Cell key={index} fill={this.stringToColour(entry.country)} />)}
-                                        </Pie>
-                                        <Tooltip content={this.renderPieTooltip}/>
-                                    </PieChart>
-                                </ResponsiveContainer>
+                            <div className="pie-charts">
+                                <div className="visits-by-os pie-chart">
+                                    <h3>Visits by OS</h3>
+                                    <ResponsiveContainer width="100%" height={200}>
+                                        <PieChart >
+                                            <Pie data={this.state.visitsByOS} dataKey="visits" nameKey="OS" outerRadius={80} innerRadius={30}  >
+                                                {this.state.visitsByOS.map((entry, index) => <Cell key={index} fill={this.stringToColour(entry.OS)} payload={{percentage:entry.percentage}} />)}
+                                            </Pie>
+                                            <Tooltip content={this.renderPieTooltip}/>
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <div className="visits-by-device-type pie-chart">
+                                    <h3>Visits by Device Type</h3>
+                                    <ResponsiveContainer width="100%" height={200}>
+                                        <PieChart >
+                                            <Pie data={this.state.visitsByDeviceType} dataKey="visits" nameKey="device_type" outerRadius={80} innerRadius={30} >
+                                                {this.state.visitsByDeviceType.map((entry, index) => <Cell key={index} fill={this.stringToColour(entry.device_type)} />)}
+                                            </Pie>
+                                            <Tooltip content={this.renderPieTooltip}/>
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <div className="visits-by-country pie-chart">
+                                    <h3>Visits by country</h3>
+                                    <ResponsiveContainer width="100%" height={200}>
+                                        <PieChart >
+                                            <Pie data={this.state.visitsByCountry} dataKey="visits" nameKey="country" outerRadius={80} innerRadius={30} >
+                                                {this.state.visitsByCountry.map((entry, index) => <Cell key={index} fill={this.stringToColour(entry.country)} />)}
+                                            </Pie>
+                                            <Tooltip content={this.renderPieTooltip}/>
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
                             <div className="unique-visits line-chart">
                                 <h3>Unique visits: {this.state.uniqueVisits}</h3>
